@@ -1,0 +1,5 @@
+::ng-deep .intl-tel-input.separate-dial-code .selected-dial-code {
+  display: table-cell;
+  vertical-align: middle;
+  padding-left: 10px!important;
+}

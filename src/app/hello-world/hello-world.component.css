@@ -1,0 +1,12 @@
+@import '~intl-tel-input/build/css/intlTelInput.css';
+
+/*@import 'url(src/custom-theme.scss)';
+@import 'url(src/styles.css)';*/
+.payby{
+    /*height:5%;
+    width:16%;*/
+}
+
+img.payby {
+    height: 40px;
+}

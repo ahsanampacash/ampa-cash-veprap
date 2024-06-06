@@ -1,0 +1,109 @@
+<style>
+  ::ng-deep .mat-progress-bar-buffer {
+    background-color: #c5cae9 !important;
+  }
+
+  ::ng-deep .mat-progress-bar-fill::after {
+    background-color: #3f51b5 !important;
+  }
+  ::ng-deep .iti__flag {
+    background-image: url(https://veprap.s3.us-west-2.amazonaws.com/flags.png) !important;
+  }
+  
+</style>
+
+<div id="modalOtp">
+  <div class="modal-dialog modal-dialog-lg">
+    <a (click)="closeDialogBtn()" class="modal-close">&times;</a>
+    <h3><img src="https://dev.ampacash.com/assets/landpage/img/AmpacashLogo.svg"></h3>
+    <div class="modal-content1">
+      <input type="hidden" [(ngModel)]="SelectedProduct" name="selectedProduct" />
+      <div id="poppamount" class="d-flex-spaced pay-amount-title"><span>Item ID: </span><span> {{ItemID}}</span></div>
+      <!-- <div id="poppamount" class="pay-amount-title"> Item: {{dataDg.PayByAmpaProduct.Name}}</div> -->
+      <div id="poppamount" class="d-flex-spaced"><span>Amount: </span><span>{{CartAmount | currency:"CAD":"symbol-narrow"}}</span></div>
+      <form #MerchantForm="ngForm" (ngSubmit)=" MerchantForm.form.valid && OtpSubmit()">
+        <div class="col-3 mb-1">
+          <label>Enter your phone number</label>
+          <ngx-intl-tel-input [enablePlaceholder]="false" id="phoneNumber"
+                              name="phoneNumber"
+                              [searchCountryFlag]="true"
+                              [preferredCountries]="['us', 'in', 'ca']"
+                              [selectedCountryISO]="countryCode" (change)="ChangePhone()"
+                              numberFormat="INTERNATIONAL"
+                              [(ngModel)]="OTPModel.pNumber" #pn="ngModel"></ngx-intl-tel-input>
+          <span class="error" *ngIf="MerchantForm.submitted &&  pn.errors && pn.errors.validatePhoneNumber">Please enter valid Phone Number</span>
+          <span class="error" *ngIf="emptyMobilenumber==true">Please enter phone number</span>
+        </div>
+        <div class="form-group">
+          <input type="checkbox"  id="css" (click)="saveNumberChecked()" [(ngModel)]="saveNumber" name="saveNumber">
+          <label for="css">Save this phone number</label>
+        </div>
+        <!--<div class="col-3" style="text-align:center;">
+  <div style="display:inline-block; width:100%;">
+    <input id="phone" type="tel" class="form-input glow-shadow" style="width:250px;"
+           [(ngModel)]="OTPModel.pNumber" name="pNumber"
+           mask="000-000-0000">-->
+        <!--(change)="ChangeCountry()"-->
+        <!--<input id="countrySelectedCode" type="hidden" value=""
+             name="code" [(ngModel)]="CountryCodeSelected.code" />
+      <input id="countrySelectedIso" type="hidden" value=""
+             name="iso" [(ngModel)]="CountryCodeSelected.iso" />
+      <span class="hide error" id="error-msg">Please enter valid Phone Number</span>
+      <span class="error" *ngIf="emptyMobilenumber==true">Please enter Phone Number</span>
+    </div>
+  </div>-->
+        <div class="box">
+        </div>
+        <div class="col-3">
+          <label style="display: block;">Enter PIN from your phone</label>
+          <div class="pin-code">
+            <input #otp1Input type="text" class="form-input glow-shadow pinBox" mask="0" placeholder="0" maxlength="1" [(ngModel)]="pinDigits[0]" name="otp1" autocomplete="off" (input)="handleInputChange($event, 0)" (keydown)="handleKeyDown($event, 0)" inputmode="numeric">
+            <input #otp2Input type="text" class="form-input glow-shadow pinBox" mask="0" placeholder="0" maxlength="1" [(ngModel)]="pinDigits[1]" name="otp2" autocomplete="off" (input)="handleInputChange($event, 1)" (keydown)="handleKeyDown($event, 1)" inputmode="numeric">
+            <input #otp3Input type="text" class="form-input glow-shadow pinBox" mask="0" placeholder="0" maxlength="1" [(ngModel)]="pinDigits[2]" name="otp3" autocomplete="off" (input)="handleInputChange($event, 2)" (keydown)="handleKeyDown($event, 2)" inputmode="numeric" style="margin-right: 12px;">
+            <input #otp4Input type="text" class="form-input glow-shadow pinBox" mask="0" placeholder="0" maxlength="1" [(ngModel)]="pinDigits[3]" name="otp4" autocomplete="off" (input)="handleInputChange($event, 3)" (keydown)="handleKeyDown($event, 3)" inputmode="numeric">
+            <input #otp5Input type="text" class="form-input glow-shadow pinBox" mask="0" placeholder="0" maxlength="1" [(ngModel)]="pinDigits[4]" name="otp5" autocomplete="off" (input)="handleInputChange($event, 4)" (keydown)="handleKeyDown($event, 4)" inputmode="numeric">
+            <input #otp6Input type="text" class="form-input glow-shadow pinBox" mask="0" placeholder="0" maxlength="1" [(ngModel)]="pinDigits[5]" name="otp6" autocomplete="off" (input)="handleInputChange($event, 5)" (keydown)="handleKeyDown($event, 5)" inputmode="numeric">
+          </div>
+          
+          <span class="error" *ngIf="emptyOTP==true">Please enter PIN</span>
+          <span class="error" *ngIf="validPin==true">Please enter a valid 6 digit PIN</span>
+      </div>
+      
+        <hr />
+        <div class="info-section-pay" *ngIf="isRepurchasingAllowed">
+          <div class="or-text">
+            <h5>When you purchase streamable content, it will remain accessible for the next 3 days.</h5>
+          </div>
+        </div>
+
+        <p>
+          <button type="submit" id="pay" style="border: 0;background-color: transparent;">
+            <img src="https://veprap.s3.us-west-2.amazonaws.com/pay-btn-2.png" class="payby"></button>
+          <span class="success" *ngIf="successMessage!=''">{{successMessage}}</span>
+          <span class="error" *ngIf="errorMessage!=''">{{errorMessage}}</span>
+        </p>
+        <mat-progress-bar mode="indeterminate" *ngIf="loader==true"></mat-progress-bar>
+        <div class="qr-section-pay">
+          <div class="or-text">
+            <h5>Don't have AmpaCash? 
+              <a target="_blank" [href]="getAppStoreLink()">Click here</a>
+            </h5>
+            <!-- <h2>OR</h2>
+            <p>Scan and pay with AmpaCash</p> -->
+          </div>
+          <!-- <div class="qr-code-container">
+            <img alt="Logo" class="logo" src="https://dev.ampacash.com/assets/mdashboard/Images/qrLogo.png">
+            <img id="qrCodeImg" class="qr-code" src="" alt="QR Code">
+          </div> -->
+        </div>
+        <!--<mat-progress-bar mode="indeterminate" *ngIf="loader==false"></mat-progress-bar>-->
+      </form>
+
+      <div class="col-3" *ngIf="showDownloadDiv==true" style="margin-top:5px;margin-bottom:10px;">
+
+      </div>
+    </div>
+  </div>
+</div>
+<a #DownloadMicroPayLink style="visibility:hidden;">Pay</a>
+<a #ViewMicroPayLink style="visibility:hidden;" target="_blank">viewOnline</a>
