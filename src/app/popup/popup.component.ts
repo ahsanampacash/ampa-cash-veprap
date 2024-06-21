@@ -643,18 +643,15 @@ export class PopupComponent implements OnInit {
     let node = document.createElement('script');
 
     node = document.createElement('script');
-    node.src = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.9/js/intlTelInput.js';
+    node.src = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/23.1.0/js/intlTelInput.js';
     node.type = 'text/javascript';
     document.getElementsByTagName('head')[0].appendChild(node);
 
     node = document.createElement('script');
-    node.src = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.9/js/intlTelInput.min.js';
+    node.src = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/23.1.0/js/intlTelInput.min.js';
     node.type = 'text/javascript';
     document.getElementsByTagName('head')[0].appendChild(node);
 
-    node = document.createElement('script');
-    node.src = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.9/js/utils.js';
-    node.type = 'text/javascript';
     document.getElementsByTagName('head')[0].appendChild(node);
     node = document.createElement('script');
     node.src = 'https://veprap.s3.us-west-2.amazonaws.com/intlTelInputCountryCustom.js';

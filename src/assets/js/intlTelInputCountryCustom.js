@@ -27,7 +27,7 @@ var telInput = $("#phone"),
       callback(countryCode);
     });
   },
-  utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.9/js/utils.js"
+  // utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.9/js/utils.js"
 });
 
 var reset = function () {
